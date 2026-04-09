@@ -27,7 +27,7 @@ This repo contains coursework from a scripting and automation course approached 
 ## Stack
 
 - **Language:** Python
-- **Environment:** AWS (cloud instances)
+- **Environment:** AWS (EC2)
 - **Version Control:** Git
 - **Focus:** Security administration, config management, automation
 
