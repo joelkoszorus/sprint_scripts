@@ -4,7 +4,7 @@
 
 `logparser.py` is a command-line tool that scans a Linux `auth.log` file and pulls out every failed SSH login attempt. It reports the timestamp, username, and source IP of each failure — both to the terminal and to a CSV file you can keep for further analysis.
 
-This is the kind of script a security administrator would run after spotting unusual activity or as a scheduled audit step. It is intentionally simple and uses only Python standard-library modules.
+This is the kind of script you would run after spotting unusual activity or as a scheduled audit step. It is intentionally simple and uses only Python standard-library modules.
 
 ---
 
@@ -17,14 +17,14 @@ This is the kind of script a security administrator would run after spotting unu
 - Extracts: **timestamp**, **username**, and **source IPv4 address**
 - Prints a clean, formatted table to the terminal
 - Writes results to a CSV file with a header row
-- Handles every common error (missing file, bad permissions, no results) with a clear message — no Python tracebacks exposed to the user
+- Handles every common error (missing file, bad permissions, no results) with a clear message
 
 ---
 
 ## 3. Requirements
 
 - Python 3.6 or later
-- No external packages — everything used (`argparse`, `re`, `csv`, `sys`, `os`) is part of the Python standard library
+- No external packagess
 
 ---
 
@@ -119,7 +119,7 @@ Breaking it down piece by piece:
 | `\s+from\s+` | ` from ` | Separator between username and IP. |
 | `((?:\d{1,3}\.){3}\d{1,3})` | `142.146.24.37` | Captures an IPv4 address. Four groups of 1–3 digits separated by dots. IPv6 is intentionally not matched. |
 
-The regex is compiled once at module load time (stored in `FAILED_LOGIN_PATTERN`) so it is not recompiled for every line — this is the efficient way to apply a pattern across a large file.
+The regex is compiled once at module load time (stored in `FAILED_LOGIN_PATTERN`) so it is not recompiled for every line, I found this to be an efficient way to apply a pattern across a large file.
 
 ### Data Flow
 
@@ -149,14 +149,3 @@ extract_failed_logins()  ← applies regex line by line
 | Log file has no matching lines | `[INFO] No failed SSH login attempts found` — no CSV written |
 
 All errors use a `[ERROR]` or `[INFO]` prefix and plain English so the cause is immediately obvious without needing to read a stack trace.
-
----
-
-## 9. Future Improvements
-
-- **Count by IP** — add a summary section showing how many attempts came from each source address, making it easy to spot the loudest attackers at a glance
-- **Date range filter** — accept `--start` and `--end` flags to analyze only a window of time
-- **Threshold alerting** — flag any IP that appears more than N times as a potential brute-force attempt
-- **Multiple log file support** — accept a directory path or glob pattern and merge results across rotated log files (e.g., `auth.log.1`, `auth.log.2.gz`)
-- **JSON output option** — add `--format json` alongside CSV for pipeline-friendly output
-- **IPv6 support** — extend the regex to optionally capture IPv6 addresses if the environment uses them
