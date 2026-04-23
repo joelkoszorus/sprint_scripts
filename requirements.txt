@@ -1,0 +1,5 @@
+# No external dependencies.
+# logparser.py uses only Python standard library modules:
+#   argparse, re, csv, sys, os
+#
+# Requires: Python 3.6+
