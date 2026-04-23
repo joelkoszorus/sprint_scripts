@@ -55,7 +55,7 @@ python logparser.py <logfile> <output.csv>
 **Example:**
 
 ```bash
-python logparser.py sample/auth.log failed_logins.csv
+python logparser.py auth.log failed_logins.csv
 ```
 
 ---
