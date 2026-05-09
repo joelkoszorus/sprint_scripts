@@ -1,4 +1,4 @@
-# sysinfo.py — Linux System Information Gatherer
+# Sprint 2 —  System Information Gatherer
 
 ## Description
 
