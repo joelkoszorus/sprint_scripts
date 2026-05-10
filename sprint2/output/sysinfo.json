@@ -1,0 +1,75 @@
+{
+    "system": {
+        "hostname": "NetBox",
+        "fqdn": "NetBox",
+        "os_name": "Linux",
+        "os_version": "Ubuntu 24.04.4 LTS",
+        "kernel_version": "6.8.0-1052-raspi",
+        "architecture": "aarch64"
+    },
+    "cpu": {
+        "cpu_model": "N/A",
+        "physical_cores": 4,
+        "logical_cpus": 4,
+        "cpu_utilization": "0.0%"
+    },
+    "memory": {
+        "total_ram": "15.60 GB",
+        "used_ram": "247.57 MB",
+        "available_ram": "15.12 GB",
+        "memory_percent": "3.1%"
+    },
+    "disk": [
+        {
+            "device": "/dev/mmcblk0p2",
+            "mountpoint": "/",
+            "total": "468.90 GB",
+            "used": "16.58 GB",
+            "free": "433.23 GB",
+            "percent": "3.7%"
+        },
+        {
+            "device": "/dev/loop1",
+            "mountpoint": "/snap/snapd/26383",
+            "total": "41.88 MB",
+            "used": "41.88 MB",
+            "free": "0.00 B",
+            "percent": "100.0%"
+        },
+        {
+            "device": "/dev/mmcblk0p1",
+            "mountpoint": "/boot/firmware",
+            "total": "504.11 MB",
+            "used": "187.53 MB",
+            "free": "316.57 MB",
+            "percent": "37.2%"
+        },
+        {
+            "device": "/dev/loop2",
+            "mountpoint": "/snap/snapd/26869",
+            "total": "42.75 MB",
+            "used": "42.75 MB",
+            "free": "0.00 B",
+            "percent": "100.0%"
+        }
+    ],
+    "network": {
+        "primary_ip": "192.168.0.100",
+        "interfaces": [
+            {
+                "interface": "lo",
+                "ipv4": "127.0.0.1",
+                "mac": "00:00:00:00:00:00"
+            },
+            {
+                "interface": "eth0",
+                "ipv4": "192.168.0.100",
+                "mac": "88:a2:9e:0c:51:29"
+            }
+        ]
+    },
+    "uptime": {
+        "boot_time": "2026-04-22 19:01:31",
+        "uptime": "17d 20h 33m"
+    }
+}

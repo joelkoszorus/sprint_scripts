@@ -1,0 +1,46 @@
+Category,Item,Value
+System,Hostname,NetBox
+System,Fqdn,NetBox
+System,Os Name,Linux
+System,Os Version,Ubuntu 24.04.4 LTS
+System,Kernel Version,6.8.0-1052-raspi
+System,Architecture,aarch64
+CPU,Cpu Model,N/A
+CPU,Physical Cores,4
+CPU,Logical Cpus,4
+CPU,Cpu Utilization,0.0%
+Memory,Total Ram,15.60 GB
+Memory,Used Ram,247.26 MB
+Memory,Available Ram,15.12 GB
+Memory,Memory Percent,3.1%
+Disk 1 (/),Device,/dev/mmcblk0p2
+Disk 1 (/),Mount Point,/
+Disk 1 (/),Total,468.90 GB
+Disk 1 (/),Used,16.58 GB
+Disk 1 (/),Free,433.23 GB
+Disk 1 (/),Percent,3.7%
+Disk 2 (/snap/snapd/26383),Device,/dev/loop1
+Disk 2 (/snap/snapd/26383),Mount Point,/snap/snapd/26383
+Disk 2 (/snap/snapd/26383),Total,41.88 MB
+Disk 2 (/snap/snapd/26383),Used,41.88 MB
+Disk 2 (/snap/snapd/26383),Free,0.00 B
+Disk 2 (/snap/snapd/26383),Percent,100.0%
+Disk 3 (/boot/firmware),Device,/dev/mmcblk0p1
+Disk 3 (/boot/firmware),Mount Point,/boot/firmware
+Disk 3 (/boot/firmware),Total,504.11 MB
+Disk 3 (/boot/firmware),Used,187.53 MB
+Disk 3 (/boot/firmware),Free,316.57 MB
+Disk 3 (/boot/firmware),Percent,37.2%
+Disk 4 (/snap/snapd/26869),Device,/dev/loop2
+Disk 4 (/snap/snapd/26869),Mount Point,/snap/snapd/26869
+Disk 4 (/snap/snapd/26869),Total,42.75 MB
+Disk 4 (/snap/snapd/26869),Used,42.75 MB
+Disk 4 (/snap/snapd/26869),Free,0.00 B
+Disk 4 (/snap/snapd/26869),Percent,100.0%
+Network,Primary IP,192.168.0.100
+Network,lo IPv4,127.0.0.1
+Network,lo MAC,00:00:00:00:00:00
+Network,eth0 IPv4,192.168.0.100
+Network,eth0 MAC,88:a2:9e:0c:51:29
+Uptime,Boot Time,2026-04-22 19:01:31
+Uptime,Uptime,17d 20h 33m
