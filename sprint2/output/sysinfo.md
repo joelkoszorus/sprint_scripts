@@ -1,6 +1,6 @@
 # Screen Output
 
-```
+```bash
 ===== SYSTEM INFORMATION =====
   Hostname         : NetBox
   FQDN             : NetBox
