@@ -4,8 +4,7 @@ Python automation scripts for system and security administration — AWS cloud l
 
 ## Overview
 
-This repo contains coursework from a scripting and automation course approached from a sysadmin and cybersecurity perspective. The focus is learning-by-doing: writing real Python scripts to solve problems a security admin would actually encounter on the job.
-
+This repo contains coursework from a scripting and automation course approached from a sysadmin and cybersecurity perspective. The focus is learning-by-doing: writing real Python scripts to solve real problems.
 ## Topics Covered
 
 - Log analysis scripting
