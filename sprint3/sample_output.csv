@@ -1,5 +1,0 @@
-target_ip,country,region,city,isp,port,service,state
-192.168.1.10,United States,Washington,Seattle,Comcast,22/tcp,ssh,open
-192.168.1.10,United States,Washington,Seattle,Comcast,80/tcp,http,open
-192.168.1.10,United States,Washington,Seattle,Comcast,443/tcp,https,open
-192.168.1.10,United States,Washington,Seattle,Comcast,8080/tcp,http-proxy,open

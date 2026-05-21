@@ -287,7 +287,6 @@ def print_summary(
     target: str,
     geo: dict,
     ports: list[dict],
-    output_path: str,
 ) -> None:
     print("\n" + "=" * 40)
     print("        NetRecon Scan Summary")
@@ -307,8 +306,7 @@ def print_summary(
     else:
         print("  (none detected)")
 
-    print(f"\nResults written to:\n  {output_path}\n")
-    print("=" * 40 + "\n")
+    print("\n" + "=" * 40 + "\n")
 
 
 # CLI
@@ -358,7 +356,7 @@ def main() -> None:
         ports = run_local_scan(target)
 
     write_csv(args.output_csv, target, geo, ports, scan_dt)
-    print_summary(target, geo, ports, args.output_csv)
+    print_summary(target, geo, ports)
 
 
 if __name__ == "__main__":
