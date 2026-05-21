@@ -1,8 +1,9 @@
-"""
-netrecon.py — Network Reconnaissance Tool
-Combines Nmap port scanning and IP geolocation into a CSV report.
-Optionally executes the scan remotely over SSH via Paramiko.
-"""
+#!/usr/bin/env python3
+# Network Reconnaissance Tool
+# Joel Koszorus 05/24/2026
+#
+# Usage: 
+#     python3 netrecon.py <target_ip> <output_csv> [--remote <ssh_host>]
 
 import argparse
 import csv
@@ -15,7 +16,7 @@ from typing import Optional
 
 import requests
 
-# ── Optional imports with clear user-facing errors ─────────────────────────
+# Optional imports with clear user-facing errors 
 try:
     import nmap
 except ImportError:
@@ -24,16 +25,16 @@ except ImportError:
 try:
     import paramiko
 except ImportError:
-    paramiko = None  # SSH functionality will be disabled gracefully
+    paramiko = None
 
-# ── Constants ───────────────────────────────────────────────────────────────
+# Constants 
 GEO_API_URL = "http://ip-api.com/json/{ip}"
 GEO_TIMEOUT = 10          # seconds
 NMAP_ARGS = "-sV -Pn"
 SSH_PORT = 22
 CSV_FIELDS = ["target_ip", "country", "region", "city", "isp", "port", "service", "state"]
 
-# ── Logging setup ────────────────────────────────────────────────────────────
+# Logging setup with INFO level and simple formatting
 logging.basicConfig(
     level=logging.INFO,
     format="%(levelname)s: %(message)s"
@@ -41,7 +42,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
-# ── Input validation ─────────────────────────────────────────────────────────
+# Input validation 
 
 def validate_ip(ip: str) -> str:
     """Return the IP string if valid, otherwise exit with an error."""
@@ -59,7 +60,7 @@ def validate_ip(ip: str) -> str:
             sys.exit(f"[ERROR] '{ip}' is not a valid IP address or resolvable hostname.")
 
 
-# ── Geolocation ──────────────────────────────────────────────────────────────
+# Geolocation
 
 def get_geolocation(ip: str) -> dict:
     """
@@ -108,7 +109,7 @@ def get_geolocation(ip: str) -> dict:
     }
 
 
-# ── Local Nmap scan ──────────────────────────────────────────────────────────
+# Local Nmap scan
 
 def run_local_scan(target: str) -> list[dict]:
     """
@@ -155,13 +156,9 @@ def _parse_nmap_scanner(scanner: nmap.PortScanner, target: str) -> list[dict]:
     return open_ports
 
 
-# ── Remote SSH scan ──────────────────────────────────────────────────────────
+# Remote SSH scan
 
-def run_remote_scan(target: str, ssh_host: str) -> list[dict]:
-    """
-    SSH into ssh_host, run nmap against target, and parse stdout.
-    Prompts the user for SSH credentials; never hardcodes them.
-    """
+def run_remote_scan(target: str, ssh_host: str) -> list[dict]:   
     if paramiko is None:
         sys.exit("[ERROR] Paramiko is not installed. Run: pip install paramiko")
 
@@ -211,11 +208,7 @@ def run_remote_scan(target: str, ssh_host: str) -> list[dict]:
 
 
 def _parse_nmap_text(output: str, target: str) -> list[dict]:
-    """
-    Parse plain-text Nmap output (as produced by the CLI) into a list of
-    open-port dicts.  This covers the remote-scan path where we receive
-    stdout rather than an nmap.PortScanner object.
-    """
+    
     open_ports: list[dict] = []
 
     for line in output.splitlines():
@@ -235,7 +228,7 @@ def _parse_nmap_text(output: str, target: str) -> list[dict]:
     return open_ports
 
 
-# ── CSV writer ───────────────────────────────────────────────────────────────
+# CSV writer
 
 def write_csv(
     output_path: str,
@@ -243,7 +236,6 @@ def write_csv(
     geo: dict,
     ports: list[dict],
 ) -> None:
-    """Write combined geolocation + port data to a CSV file."""
     rows = []
 
     if ports:
@@ -284,7 +276,7 @@ def write_csv(
     log.info("CSV written to %s", output_path)
 
 
-# ── Console summary ──────────────────────────────────────────────────────────
+# Console summary 
 
 def print_summary(
     target: str,
@@ -292,7 +284,6 @@ def print_summary(
     ports: list[dict],
     output_path: str,
 ) -> None:
-    """Print a formatted scan summary to stdout."""
     print("\n" + "=" * 40)
     print("        NetRecon Scan Summary")
     print("=" * 40)
@@ -315,7 +306,7 @@ def print_summary(
     print("=" * 40 + "\n")
 
 
-# ── CLI ──────────────────────────────────────────────────────────────────────
+# CLI
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
