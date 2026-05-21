@@ -12,6 +12,7 @@ import ipaddress
 import logging
 import socket
 import sys
+from datetime import datetime
 from typing import Optional
 
 import requests
@@ -32,7 +33,8 @@ GEO_API_URL = "http://ip-api.com/json/{ip}"
 GEO_TIMEOUT = 10          # seconds
 NMAP_ARGS = "-sV -Pn"
 SSH_PORT = 22
-CSV_FIELDS = ["target_ip", "country", "region", "city", "isp", "port", "service", "state"]
+CSV_FIELDS = ["scan_datetime", "target_ip", "country", "region", "city", "isp", "port", "service", "state"]
+DEFAULT_OUTPUT = "output.txt"
 
 # Logging setup with INFO level and simple formatting
 logging.basicConfig(
@@ -235,32 +237,35 @@ def write_csv(
     target: str,
     geo: dict,
     ports: list[dict],
+    scan_dt: str,
 ) -> None:
     rows = []
 
     if ports:
         for p in ports:
             rows.append({
-                "target_ip": target,
-                "country":   geo["country"],
-                "region":    geo["region"],
-                "city":      geo["city"],
-                "isp":       geo["isp"],
-                "port":      p["port"],
-                "service":   p["service"],
-                "state":     p["state"],
+                "scan_datetime": scan_dt,
+                "target_ip":     target,
+                "country":       geo["country"],
+                "region":        geo["region"],
+                "city":          geo["city"],
+                "isp":           geo["isp"],
+                "port":          p["port"],
+                "service":       p["service"],
+                "state":         p["state"],
             })
     else:
         # Still write one row with geo data even if no open ports were found.
         rows.append({
-            "target_ip": target,
-            "country":   geo["country"],
-            "region":    geo["region"],
-            "city":      geo["city"],
-            "isp":       geo["isp"],
-            "port":      "",
-            "service":   "",
-            "state":     "no open ports",
+            "scan_datetime": scan_dt,
+            "target_ip":     target,
+            "country":       geo["country"],
+            "region":        geo["region"],
+            "city":          geo["city"],
+            "isp":           geo["isp"],
+            "port":          "",
+            "service":       "",
+            "state":         "no open ports",
         })
 
     try:
@@ -320,7 +325,12 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument("target_ip",  help="Target IP address or hostname to scan.")
-    parser.add_argument("output_csv", help="Path for the CSV output file.")
+    parser.add_argument(
+        "output_csv",
+        nargs="?",
+        default=DEFAULT_OUTPUT,
+        help=f"Path for the CSV output file (default: {DEFAULT_OUTPUT}).",
+    )
     parser.add_argument(
         "--remote",
         metavar="SSH_HOST",
@@ -333,7 +343,8 @@ def main() -> None:
     parser = build_parser()
     args   = parser.parse_args()
 
-    target = validate_ip(args.target_ip)
+    target  = validate_ip(args.target_ip)
+    scan_dt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # Geolocation (always local regardless of --remote)
     log.info("Fetching geolocation for %s …", target)
@@ -346,7 +357,7 @@ def main() -> None:
     else:
         ports = run_local_scan(target)
 
-    write_csv(args.output_csv, target, geo, ports)
+    write_csv(args.output_csv, target, geo, ports, scan_dt)
     print_summary(target, geo, ports, args.output_csv)
 
 
