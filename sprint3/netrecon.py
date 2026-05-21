@@ -32,7 +32,7 @@ GEO_TIMEOUT = 10          # seconds
 NMAP_ARGS = "-sV -Pn"
 SSH_PORT = 22
 CSV_FIELDS = ["target_ip", "country", "region", "city", "isp", "port", "service", "state"]
-DEFAULT_OUTPUT = "output.txt"
+DEFAULT_OUTPUT = "output.csv"
 
 # Logging setup with INFO level and simple formatting
 logging.basicConfig(
