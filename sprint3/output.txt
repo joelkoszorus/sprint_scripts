@@ -1,5 +1,0 @@
-scan_datetime,target_ip,country,region,city,isp,port,service,state
-2026-05-20 20:48:21,192.168.0.188,,,,,135/tcp,msrpc,open
-2026-05-20 20:48:21,192.168.0.188,,,,,139/tcp,netbios-ssn,open
-2026-05-20 20:48:21,192.168.0.188,,,,,445/tcp,microsoft-ds,open
-2026-05-20 20:48:21,192.168.0.188,,,,,5357/tcp,http,open
