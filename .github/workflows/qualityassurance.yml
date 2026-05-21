@@ -12,7 +12,7 @@ permissions:
 
 jobs:
 
-  # ── Linting ──────────────────────────────────────────────────────────────
+  # Linting
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
       - name: ruff check
         run: ruff check .
 
-  # ── CodeQL — semantic security analysis ──────────────────────────────────
+  # CodeQL SAST
   codeql:
     name: CodeQL
     runs-on: ubuntu-latest
@@ -53,7 +53,7 @@ jobs:
         with:
           category: /language:python
 
-  # ── Dependency CVE scan ───────────────────────────────────────────────────
+  # Dependency CVE scan
   dependency-scan:
     name: Dependency CVE Scan
     runs-on: ubuntu-latest
@@ -68,7 +68,7 @@ jobs:
       - name: Install pip-audit
         run: pip install pip-audit
 
-      # Scans every requirements.txt found in the repo (handles future sprints)
+      # Scans every requirements.txt found in the repo (will handle future sprints)
       - name: pip-audit
         run: |
           find . -name "requirements.txt" -not -path "./.git/*" \
