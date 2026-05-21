@@ -12,7 +12,6 @@ import ipaddress
 import logging
 import socket
 import sys
-from typing import Optional
 
 import requests
 
