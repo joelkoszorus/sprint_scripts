@@ -45,7 +45,7 @@ log = logging.getLogger(__name__)
 # Input validation 
 
 def validate_ip(ip: str) -> str:
-    """Return the IP string if valid, otherwise exit with an error."""
+    # Return the IP string if valid, otherwise exit with an error.
     try:
         ipaddress.ip_address(ip)
         return ip
