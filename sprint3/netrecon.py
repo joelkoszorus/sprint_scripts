@@ -63,11 +63,6 @@ def validate_ip(ip: str) -> str:
 # Geolocation
 
 def get_geolocation(ip: str) -> dict:
-    """
-    Query ip-api.com for geolocation data.
-    Returns a dict with keys: country, region, city, isp.
-    Falls back to empty strings on any failure.
-    """
     empty = {"country": "", "region": "", "city": "", "isp": ""}
 
     # Private / reserved ranges won't resolve via the public API.
@@ -112,10 +107,6 @@ def get_geolocation(ip: str) -> dict:
 # Local Nmap scan
 
 def run_local_scan(target: str) -> list[dict]:
-    """
-    Run an Nmap scan locally and return a list of open-port dicts.
-    Each dict has keys: port, service, state.
-    """
     try:
         scanner = nmap.PortScanner()
     except nmap.PortScannerError:
@@ -133,7 +124,7 @@ def run_local_scan(target: str) -> list[dict]:
 
 
 def _parse_nmap_scanner(scanner: nmap.PortScanner, target: str) -> list[dict]:
-    """Extract open ports from a completed PortScanner object."""
+    # Extract open ports from a completed PortScanner object.
     open_ports: list[dict] = []
 
     if target not in scanner.all_hosts():
