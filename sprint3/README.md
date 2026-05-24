@@ -115,9 +115,6 @@ Open Ports:
   80/tcp          http         open
   443/tcp         https        open
 
-Results written to:
-  results.csv
-
 ========================================
 ```
 
