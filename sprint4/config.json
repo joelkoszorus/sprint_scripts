@@ -1,0 +1,13 @@
+{
+    "checks": {
+        "disk_usage_percent": 80,
+        "memory_usage_percent": 90,
+        "cpu_load_1min": 2.0,
+        "services": [
+            "sshd",
+            "cron"
+        ]
+    },
+    "log_file": "/home/ubuntu/healthmon.log",
+    "alert_log": "/home/ubuntu/alerts.log"
+}

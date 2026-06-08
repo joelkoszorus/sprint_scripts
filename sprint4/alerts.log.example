@@ -1,0 +1,29 @@
+2026-06-07 14:10:01 - WARNING - CPU ALERT:
+Current load: 3.91
+Threshold:    2.00
+
+2026-06-07 14:15:01 - WARNING - CPU ALERT:
+Current load: 4.15
+Threshold:    2.00
+
+2026-06-07 14:15:01 - ERROR - SERVICE ALERT:
+Service:  cron
+Status:   inactive
+Expected: active
+
+2026-06-07 14:20:03 - WARNING - MEMORY ALERT:
+Current usage: 91.2%
+Threshold:     90.0%
+
+2026-06-07 14:20:03 - WARNING - CPU ALERT:
+Current load: 5.02
+Threshold:    2.00
+
+2026-06-07 14:20:03 - ERROR - SERVICE ALERT:
+Service:  cron
+Status:   inactive
+Expected: active
+
+2026-06-07 14:25:01 - WARNING - DISK ALERT:
+Current usage: 82.6%
+Threshold:     80.0%

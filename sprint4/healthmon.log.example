@@ -1,0 +1,49 @@
+2026-06-07 14:00:01 - INFO - Health monitoring started.
+2026-06-07 14:00:01 - INFO - Disk usage: 42.3% (threshold: 80.0%)
+2026-06-07 14:00:01 - INFO - Memory usage: 63.7% (threshold: 90.0%)
+2026-06-07 14:00:01 - INFO - CPU load (1min): 1.32 (threshold: 2.00)
+2026-06-07 14:00:01 - INFO - Service sshd: active
+2026-06-07 14:00:01 - INFO - Service cron: active
+2026-06-07 14:00:01 - INFO - Health monitoring complete. Overall status: ALL CLEAR.
+2026-06-07 14:05:01 - INFO - Health monitoring started.
+2026-06-07 14:05:01 - INFO - Disk usage: 42.3% (threshold: 80.0%)
+2026-06-07 14:05:01 - INFO - Memory usage: 65.1% (threshold: 90.0%)
+2026-06-07 14:05:01 - INFO - CPU load (1min): 1.15 (threshold: 2.00)
+2026-06-07 14:05:01 - INFO - Service sshd: active
+2026-06-07 14:05:01 - INFO - Service cron: active
+2026-06-07 14:05:01 - INFO - Health monitoring complete. Overall status: ALL CLEAR.
+2026-06-07 14:10:01 - INFO - Health monitoring started.
+2026-06-07 14:10:01 - INFO - Disk usage: 42.4% (threshold: 80.0%)
+2026-06-07 14:10:01 - INFO - Memory usage: 66.2% (threshold: 90.0%)
+2026-06-07 14:10:01 - WARNING - CPU ALERT:
+Current load: 3.91
+Threshold:    2.00
+2026-06-07 14:10:01 - INFO - Service sshd: active
+2026-06-07 14:10:01 - INFO - Service cron: active
+2026-06-07 14:10:01 - INFO - Health monitoring complete. Overall status: ALERTS DETECTED.
+2026-06-07 14:15:01 - INFO - Health monitoring started.
+2026-06-07 14:15:01 - INFO - Disk usage: 42.4% (threshold: 80.0%)
+2026-06-07 14:15:01 - INFO - Memory usage: 67.8% (threshold: 90.0%)
+2026-06-07 14:15:01 - WARNING - CPU ALERT:
+Current load: 4.15
+Threshold:    2.00
+2026-06-07 14:15:01 - INFO - Service sshd: active
+2026-06-07 14:15:01 - ERROR - SERVICE ALERT:
+Service:  cron
+Status:   inactive
+Expected: active
+2026-06-07 14:15:01 - INFO - Health monitoring complete. Overall status: ALERTS DETECTED.
+2026-06-07 15:00:00 - INFO - Health monitoring started.
+2026-06-07 15:00:00 - INFO - Disk usage: 42.5% (threshold: 80.0%)
+2026-06-07 15:00:00 - INFO - Memory usage: 64.4% (threshold: 90.0%)
+2026-06-07 15:00:00 - INFO - CPU load (1min): 0.87 (threshold: 2.00)
+2026-06-07 15:00:00 - INFO - Service sshd: active
+2026-06-07 15:00:00 - INFO - Service cron: active
+2026-06-07 15:00:00 - INFO - ========== SYSTEM HEALTH SUMMARY ==========
+2026-06-07 15:00:00 - INFO - Disk Usage:   OK (42.5%)
+2026-06-07 15:00:00 - INFO - Memory Usage: OK (64.4%)
+2026-06-07 15:00:00 - INFO - CPU Load:     OK (0.87)
+2026-06-07 15:00:00 - INFO - Service sshd: OK
+2026-06-07 15:00:00 - INFO - Service cron: OK
+2026-06-07 15:00:00 - INFO - ===========================================
+2026-06-07 15:00:00 - INFO - Health monitoring complete. Overall status: ALL CLEAR.

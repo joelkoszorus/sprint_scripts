@@ -1,0 +1,61 @@
+# healthmon.py – Cron Configuration Examples
+# ============================================
+#
+# These entries are intended for the ubuntu user's crontab on the monitoring
+# host.  Edit your crontab with:
+#
+#   crontab -e
+#
+# View the currently installed crontab with:
+#
+#   crontab -l
+#
+# All output (stdout and stderr) from the script is handled by the Python
+# logging framework, so redirecting cron output to /dev/null is safe once
+# you have verified that the log paths in config.json are writable.
+#
+# --------------------------------------------------------------------------
+# Run a full monitoring pass every 5 minutes.
+# Results are written to /home/ubuntu/healthmon.log.
+# Alerts are written to /home/ubuntu/alerts.log and forwarded to syslog.
+# --------------------------------------------------------------------------
+*/5 * * * * /usr/bin/python3 /home/ubuntu/sprint4/healthmon.py /home/ubuntu/sprint4/config.json >> /dev/null 2>&1
+
+# --------------------------------------------------------------------------
+# Run a monitoring pass WITH a formatted health summary report every hour.
+# The summary is appended to the main log file so you can review it with:
+#   tail -n 20 /home/ubuntu/healthmon.log
+# --------------------------------------------------------------------------
+0 * * * * /usr/bin/python3 /home/ubuntu/sprint4/healthmon.py /home/ubuntu/sprint4/config.json --check >> /dev/null 2>&1
+
+# --------------------------------------------------------------------------
+# Alternative: keep stdout/stderr visible in cron mail for debugging.
+# Remove the >> /dev/null 2>&1 redirections and ensure the system MTA is
+# configured, or redirect to a dedicated debug log:
+# --------------------------------------------------------------------------
+# */5 * * * * /usr/bin/python3 /home/ubuntu/sprint4/healthmon.py /home/ubuntu/sprint4/config.json >> /home/ubuntu/healthmon_cron.log 2>&1
+
+# --------------------------------------------------------------------------
+# Quick-start instructions
+# --------------------------------------------------------------------------
+#
+# 1. Verify the Python path on your system:
+#      which python3
+#
+# 2. Make the script executable (optional – cron calls python3 directly):
+#      chmod +x /home/ubuntu/sprint4/healthmon.py
+#
+# 3. Open your crontab for editing:
+#      crontab -e
+#
+# 4. Paste one or both entries above, save, and exit.
+#
+# 5. Confirm the entry was saved:
+#      crontab -l
+#
+# 6. Tail the log to watch the first run:
+#      tail -f /home/ubuntu/healthmon.log
+#
+# 7. To remove all cron jobs for this user:
+#      crontab -r
+#
