@@ -8,6 +8,6 @@
             "cron"
         ]
     },
-    "log_file": "/home/netbox/healthmon.log",
-    "alert_log": "/home/netbox/alerts.log"
+    "log_file": "~/healthmon.log",
+    "alert_log": "~/alerts.log"
 }

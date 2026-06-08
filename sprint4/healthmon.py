@@ -80,6 +80,10 @@ def load_config(config_path: str) -> dict[str, Any]:
         )
         sys.exit(1)
 
+    # Expand ~ so paths like "~/healthmon.log" work for any user
+    config["log_file"] = os.path.expanduser(config["log_file"])
+    config["alert_log"] = os.path.expanduser(config["alert_log"])
+
     return config
 
 
