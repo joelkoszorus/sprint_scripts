@@ -102,6 +102,7 @@ def setup_logging(
     main_logger.setLevel(logging.DEBUG)
 
     try:
+        Path(log_file).parent.mkdir(parents=True, exist_ok=True)
         fh = logging.FileHandler(log_file)
         fh.setLevel(logging.INFO)
         fh.setFormatter(formatter)
@@ -146,6 +147,7 @@ def setup_logging(
     alert_logger.propagate = False
 
     try:
+        Path(alert_log).parent.mkdir(parents=True, exist_ok=True)
         ah = logging.FileHandler(alert_log)
         ah.setLevel(logging.WARNING)
         ah.setFormatter(formatter)
