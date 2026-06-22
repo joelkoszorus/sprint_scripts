@@ -98,32 +98,42 @@ ansible-playbook -i inventory.ini deploy.yml
 
 ## Idempotency Demonstration
 
-Both playbooks are written to be fully idempotent.
+Both playbooks are fully idempotent: the **first** run applies the desired state
+and reports `changed`, while the **second** run finds the state already correct
+and reports `changed=0` on every host. The captured `PLAY RECAP` output below was
+taken from a live run against both managed hosts.
 
-**First run** — Ansible applies the desired state; tasks report `changed`:
+| Playbook        | Run    | linux1            | linux2            |
+|-----------------|--------|-------------------|-------------------|
+| `configure.yml` | First  | `changed=6`       | `changed=6`       |
+| `configure.yml` | Second | `changed=0` ✅    | `changed=0` ✅    |
+| `deploy.yml`    | First  | `changed=2`       | `changed=2`       |
+| `deploy.yml`    | Second | `changed=0` ✅    | `changed=0` ✅    |
 
-```
-PLAY RECAP *********************************************************************
-server1 : ok=10  changed=8  unreachable=0  failed=0
-server2 : ok=10  changed=8  unreachable=0  failed=0
-```
+> **Note:** For `configure.yml`, the first run shows `ok=10` and the second
+> `ok=9`. The difference is the **Restart SSH service** handler — it only fires
+> on the first run (when the SSH hardening tasks actually change `sshd_config`),
+> so it is correctly skipped on the idempotent second run.
 
-**Second run** — the state already matches, so every task reports `ok` and
-nothing changes:
+### configure.yml
 
-```
-PLAY RECAP *********************************************************************
-server1 : ok=10  changed=0  unreachable=0  failed=0
-server2 : ok=10  changed=0  unreachable=0  failed=0
-```
+**First run** — baseline configuration applied:
 
-> **Screenshots:** Insert your first-run and second-run `PLAY RECAP` screenshots
-> here for both `configure.yml` and `deploy.yml`.
->
-> - _configure.yml — first run (changed > 0):_ **[screenshot here]**
-> - _configure.yml — second run (changed = 0):_ **[screenshot here]**
-> - _deploy.yml — first run (changed > 0):_ **[screenshot here]**
-> - _deploy.yml — second run (changed = 0):_ **[screenshot here]**
+![configure.yml first run PLAY RECAP showing changed=6 on both hosts](screenshots/configure-first-run.png)
+
+**Second run** — idempotent, zero changes:
+
+![configure.yml second run PLAY RECAP showing changed=0 on both hosts](screenshots/configure-second-run.png)
+
+### deploy.yml
+
+**First run** — HealthMon deployed:
+
+![deploy.yml first run PLAY RECAP showing changed=2 on both hosts](screenshots/deploy-first-run.png)
+
+**Second run** — idempotent, zero changes:
+
+![deploy.yml second run PLAY RECAP showing changed=0 on both hosts](screenshots/deploy-second-run.png)
 
 ## Verification
 
