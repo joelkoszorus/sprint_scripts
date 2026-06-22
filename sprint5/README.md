@@ -41,13 +41,13 @@ Running the same playbook twice produces changes only on the first run and
 - **AWS server 1 (`server1`)** — managed target; receives the full
   configuration and HealthMon deployment.
 - **AWS server 2 (`server2`)** — identical managed target. Both hosts belong to
-  the `aws_servers` group so every play targets both at once.
+  the `servers` group so every play targets both at once.
 
 ## Files
 
 | File            | Purpose                                                                 |
 |-----------------|-------------------------------------------------------------------------|
-| `inventory.ini` | Defines the `aws_servers` group, host IPs, and the SSH connection user. |
+| `inventory.ini` | Defines the `servers` group, host IPs, and the SSH connection user.     |
 | `configure.yml` | Baseline server hardening and preparation playbook.                     |
 | `deploy.yml`    | Deploys the HealthMon scripts, dependencies, and cron schedule.         |
 | `README.md`     | This document.                                                          |
