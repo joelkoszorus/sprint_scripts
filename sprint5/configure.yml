@@ -7,7 +7,7 @@
 # ===========================================================================
 
 - name: Configure baseline production settings on AWS servers
-  hosts: aws_servers
+  hosts: servers
   become: true
 
   vars:
