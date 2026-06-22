@@ -28,6 +28,10 @@
     python_dependencies:
       - psutil
 
+    # On PEP 668 distros (Ubuntu 24.04 / Python 3.12+) the system interpreter is
+    # "externally managed" and refuses system-wide pip installs without this flag.
+    pip_extra_args: "--break-system-packages"
+
     # Cron schedule values, broken out so the interval is easy to change.
     cron_job_name: "HealthMon system health check"
     cron_minute: "*/5"
