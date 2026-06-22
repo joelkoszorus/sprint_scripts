@@ -1,8 +1,11 @@
 ---
 # ===========================================================================
-# Sprint 5 - deploy.yml
-# Deploys the Sprint 4 HealthMon monitoring tool to the AWS servers:
-#   directory tree, files, Python dependencies, permissions, and a cron job.
+# deploy.yml
+# Joel Koszorus 06/21/2026
+#
+# Deploys the Sprint 4 HealthMon monitoring tool to the AWS servers: 
+# directory tree, files, Python dependencies, permissions, and a cron job.
+# 
 # Run with: ansible-playbook -i inventory.ini deploy.yml
 # ===========================================================================
 

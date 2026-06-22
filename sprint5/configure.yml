@@ -1,8 +1,11 @@
 ---
 # ===========================================================================
-# Sprint 5 - configure.yml
+# configure.yml
+# Joel Koszorus 06/21/2026
+# 
 # Prepares a freshly provisioned Linux server for production:
-#   packages, service account, timezone, SSH hardening, and logging.
+# packages, service account, timezone, SSH hardening, and logging.
+# 
 # Run with: ansible-playbook -i inventory.ini configure.yml
 # ===========================================================================
 
