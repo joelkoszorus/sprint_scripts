@@ -160,5 +160,6 @@ ansible-playbook -i inventory.ini deploy.yml --check --diff
 | `Missing sudo password`                   | Add `--ask-become-pass` or configure passwordless sudo for the SSH user.           |
 | `couldn't resolve module timezone`        | Install the collection: `ansible-galaxy collection install community.general`.     |
 | `pip3: command not found`                 | Run `configure.yml` first — it installs `python3-pip`.                             |
+| `error: externally-managed-environment`   | PEP 668 (Ubuntu 24.04+); `deploy.yml` passes `--break-system-packages`.            |
 | SSH hardening locked you out              | Confirm your public key is in `~/.ssh/authorized_keys` **before** disabling password auth. The `sshd -t` validation prevents writing a broken config. |
 | Cron job not running                      | Check `/opt/healthmon/logs/cron.log` and `sudo crontab -l -u healthmon`.            |

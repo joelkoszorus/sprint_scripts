@@ -77,6 +77,7 @@
         name: "{{ python_dependencies }}"
         state: present
         executable: pip3
+        extra_args: "{{ pip_extra_args }}"
 
     - name: Schedule healthmon.py to run on a fixed interval
       ansible.builtin.cron:
