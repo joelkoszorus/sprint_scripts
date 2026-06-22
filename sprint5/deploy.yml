@@ -1,0 +1,118 @@
+---
+# ===========================================================================
+# Sprint 5 - deploy.yml
+# Deploys the Sprint 4 HealthMon monitoring tool to the AWS servers:
+#   directory tree, files, Python dependencies, permissions, and a cron job.
+# Run with: ansible-playbook -i inventory.ini deploy.yml
+# ===========================================================================
+
+- name: Deploy the HealthMon monitoring tool to AWS servers
+  hosts: aws_servers
+  become: true
+
+  vars:
+    # Service account that owns and runs the monitoring tool.
+    app_user: healthmon
+    app_group: healthmon
+
+    # Deployment tree on the target hosts.
+    app_dir: /opt/healthmon
+    config_dir: "{{ app_dir }}/config"
+    logs_dir: "{{ app_dir }}/logs"
+
+    # Where the Sprint 4 source files live on the control node.
+    source_dir: "{{ playbook_dir }}/../sprint4"
+
+    # Python dependencies required by healthmon.py. Driven by a variable so the
+    # list can grow without editing tasks. healthmon.py imports psutil.
+    python_dependencies:
+      - psutil
+
+    # Cron schedule values, broken out so the interval is easy to change.
+    cron_job_name: "HealthMon system health check"
+    cron_minute: "*/5"
+    cron_hour: "*"
+    cron_day: "*"
+    cron_month: "*"
+    cron_weekday: "*"
+    cron_command: >-
+      python3 {{ app_dir }}/healthmon.py {{ config_dir }}/config.json
+      >> {{ logs_dir }}/cron.log 2>&1
+
+  tasks:
+    - name: Create the HealthMon directory tree
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: "0750"
+      loop:
+        - "{{ app_dir }}"
+        - "{{ config_dir }}"
+        - "{{ logs_dir }}"
+
+    - name: Deploy the healthmon.py monitoring script
+      ansible.builtin.copy:
+        src: "{{ source_dir }}/healthmon.py"
+        dest: "{{ app_dir }}/healthmon.py"
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: "0750"
+
+    - name: Deploy the config.json configuration file
+      ansible.builtin.copy:
+        src: "{{ source_dir }}/config.json"
+        dest: "{{ config_dir }}/config.json"
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: "0640"
+
+    - name: Install Python dependencies for healthmon.py
+      ansible.builtin.pip:
+        name: "{{ python_dependencies }}"
+        state: present
+        executable: pip3
+
+    - name: Schedule healthmon.py to run on a fixed interval
+      ansible.builtin.cron:
+        name: "{{ cron_job_name }}"
+        user: "{{ app_user }}"
+        minute: "{{ cron_minute }}"
+        hour: "{{ cron_hour }}"
+        day: "{{ cron_day }}"
+        month: "{{ cron_month }}"
+        weekday: "{{ cron_weekday }}"
+        job: "{{ cron_command }}"
+        state: present
+
+    # --- Validation -------------------------------------------------------
+    - name: Gather facts about the deployment tree and script
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      loop:
+        - "{{ app_dir }}"
+        - "{{ app_dir }}/healthmon.py"
+      register: deployment_stat
+
+    - name: Assert the deployment directory and script exist
+      ansible.builtin.assert:
+        that:
+          - deployment_stat.results[0].stat.isdir
+          - deployment_stat.results[1].stat.exists
+          - deployment_stat.results[1].stat.executable
+        success_msg: "Deployment tree and executable script are present."
+        fail_msg: "Deployment validation failed - directory or script missing."
+
+    - name: Read the healthmon user crontab to confirm the job exists
+      ansible.builtin.command:
+        cmd: "crontab -l -u {{ app_user }}"
+      register: crontab_contents
+      changed_when: false
+
+    - name: Assert the HealthMon cron entry is installed
+      ansible.builtin.assert:
+        that:
+          - cron_job_name in crontab_contents.stdout
+        success_msg: "Cron entry for HealthMon is installed."
+        fail_msg: "Cron entry for HealthMon was not found."

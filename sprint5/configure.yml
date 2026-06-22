@@ -1,0 +1,96 @@
+---
+# ===========================================================================
+# Sprint 5 - configure.yml
+# Prepares a freshly provisioned Linux server for production:
+#   packages, service account, timezone, SSH hardening, and logging.
+# Run with: ansible-playbook -i inventory.ini configure.yml
+# ===========================================================================
+
+- name: Configure baseline production settings on AWS servers
+  hosts: aws_servers
+  become: true
+
+  vars:
+    # Packages every production host should have installed.
+    base_packages:
+      - python3
+      - python3-pip
+      - rsyslog
+      - vim
+      - curl
+      - git
+
+    # Dedicated, non-login-privileged service account for the monitoring tool.
+    service_account: healthmon
+    service_account_shell: /bin/bash
+
+    # System timezone. Override on the command line with -e to change it.
+    system_timezone: America/Los_Angeles
+
+    # SSH hardening settings.
+    sshd_config_path: /etc/ssh/sshd_config
+    # The SSH service unit differs between distributions:
+    #   Debian/Ubuntu -> ssh        RHEL/Amazon Linux -> sshd
+    ssh_service_name: "{{ 'ssh' if ansible_os_family == 'Debian' else 'sshd' }}"
+
+  tasks:
+    - name: Update apt package cache (Debian-family only)
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+
+    - name: Install required base packages
+      ansible.builtin.package:
+        name: "{{ base_packages }}"
+        state: present
+
+    - name: Create the healthmon service account
+      ansible.builtin.user:
+        name: "{{ service_account }}"
+        shell: "{{ service_account_shell }}"
+        create_home: true
+        state: present
+
+    - name: Set the system timezone
+      community.general.timezone:
+        name: "{{ system_timezone }}"
+
+    - name: Disable SSH root login
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_path }}"
+        regexp: '^#?\s*PermitRootLogin'
+        line: "PermitRootLogin no"
+        state: present
+        validate: "/usr/sbin/sshd -t -f %s"
+      notify: Restart SSH service
+
+    - name: Disable SSH password authentication
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_path }}"
+        regexp: '^#?\s*PasswordAuthentication'
+        line: "PasswordAuthentication no"
+        state: present
+        validate: "/usr/sbin/sshd -t -f %s"
+      notify: Restart SSH service
+
+    - name: Ensure SSH public key authentication remains enabled
+      ansible.builtin.lineinfile:
+        path: "{{ sshd_config_path }}"
+        regexp: '^#?\s*PubkeyAuthentication'
+        line: "PubkeyAuthentication yes"
+        state: present
+        validate: "/usr/sbin/sshd -t -f %s"
+      notify: Restart SSH service
+
+    - name: Ensure rsyslog is installed, enabled, and running
+      ansible.builtin.service:
+        name: rsyslog
+        state: started
+        enabled: true
+
+  handlers:
+    - name: Restart SSH service
+      ansible.builtin.service:
+        name: "{{ ssh_service_name }}"
+        state: restarted
