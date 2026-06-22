@@ -1,15 +1,16 @@
-# Sprint 5 — Ansible Automated Deployment of HealthMon
+# Automated Healthmon Deployment with Ansible
 
 ## Project Overview
 
 Sprint 5 takes the **HealthMon** system-health monitoring tool built in Sprint 4
 and automates its provisioning and deployment across multiple AWS Linux servers
-using **Ansible**. Instead of configuring each host by hand, a single control
-node manages both servers through two idempotent playbooks:
+using **Ansible**. Instead of configuring each host by hand, one server doubles
+as the Ansible control node - configuring itself locally and a second server
+over SSH - through two idempotent playbooks:
 
-- **`configure.yml`** — prepares a fresh server for production (packages, a
+- **`configure.yml`** - prepares a fresh server for production (packages, a
   dedicated service account, timezone, SSH hardening, and logging).
-- **`deploy.yml`** — deploys the Sprint 4 monitoring scripts, installs their
+- **`deploy.yml`** - deploys the Sprint 4 monitoring scripts, installs their
   Python dependencies, sets permissions, and schedules them via cron.
 
 Running the same playbook twice produces changes only on the first run and
@@ -17,31 +18,33 @@ Running the same playbook twice produces changes only on the first run and
 
 ## Architecture
 
-```
-                +------------------------+
-                |     Control Node       |
-                |  (Ansible installed)   |
-                |  inventory.ini         |
-                |  configure.yml         |
-                |  deploy.yml            |
-                +-----------+------------+
-                            | SSH (key-based)
-            +---------------+----------------+
-            |                                |
-   +--------v---------+            +---------v--------+
-   |   AWS Server 1   |            |   AWS Server 2   |
-   |   (server1)      |            |   (server2)      |
-   |  HealthMon +     |            |  HealthMon +     |
-   |  cron schedule   |            |  cron schedule   |
-   +------------------+            +------------------+
+```text
+   +------------------------------------+
+   |   Server 1  (172.31.26.210)        |
+   |   "linux1" - Control Node          |
+   |   - Ansible installed              |
+   |   - inventory.ini                  |
+   |   - configure.yml / deploy.yml     |
+   |   - HealthMon + cron schedule      |
+   |     (managed locally)              |
+   +------------------+-----------------+
+                      | Key-Based SSH
+                      v
+   +------------------------------------+
+   |   Server 2  (172.31.26.22)         |
+   |   "linux2" - Managed Target        |
+   |   - HealthMon + cron schedule      |
+   +------------------------------------+
 ```
 
-- **Control node** — runs Ansible and holds the playbooks and inventory. It
-  connects to both managed servers over SSH using a private key.
-- **AWS server 1 (`server1`)** — managed target; receives the full
-  configuration and HealthMon deployment.
-- **AWS server 2 (`server2`)** — identical managed target. Both hosts belong to
-  the `servers` group so every play targets both at once.
+- **Server 1 (`linux1`, 172.31.26.210)** - the control node where Ansible is
+  installed, holding the playbooks and inventory. It also manages *itself* as a
+  target via `ansible_connection=local`, receiving the full configuration and
+  HealthMon deployment.
+- **Server 2 (`linux2`, 172.31.26.22)** - a remote managed target. Server 1
+  connects to it over SSH using a private key (`ansible_user=ubuntu`).
+- Both hosts belong to the `servers` group, so every play targets Server 1
+  (locally) and Server 2 (over SSH) at once.
 
 ## Files
 
@@ -63,7 +66,8 @@ variable.
   ```bash
   ansible-galaxy collection install community.general
   ```
-- **SSH key access** from the control node to both servers. Verify with:
+- **SSH key access** from the control node (Server 1) to the remote Server 2.
+  Server 1 manages itself over a local connection. Verify both with:
   ```bash
   ansible all -i inventory.ini -m ping
   ```
@@ -110,28 +114,23 @@ taken from a live run against both managed hosts.
 | `deploy.yml`    | First  | `changed=2`       | `changed=2`       |
 | `deploy.yml`    | Second | `changed=0` ✅    | `changed=0` ✅    |
 
-> **Note:** For `configure.yml`, the first run shows `ok=10` and the second
-> `ok=9`. The difference is the **Restart SSH service** handler — it only fires
-> on the first run (when the SSH hardening tasks actually change `sshd_config`),
-> so it is correctly skipped on the idempotent second run.
-
 ### configure.yml
 
-**First run** — baseline configuration applied:
+**First run** - baseline configuration applied:
 
 ![configure.yml first run PLAY RECAP showing changed=6 on both hosts](screenshots/configure-first-run.png)
 
-**Second run** — idempotent, zero changes:
+**Second run** - idempotent, zero changes:
 
 ![configure.yml second run PLAY RECAP showing changed=0 on both hosts](screenshots/configure-second-run.png)
 
 ### deploy.yml
 
-**First run** — HealthMon deployed:
+**First run** - HealthMon deployed:
 
 ![deploy.yml first run PLAY RECAP showing changed=2 on both hosts](screenshots/deploy-first-run.png)
 
-**Second run** — idempotent, zero changes:
+**Second run** - idempotent, zero changes:
 
 ![deploy.yml second run PLAY RECAP showing changed=0 on both hosts](screenshots/deploy-second-run.png)
 
@@ -169,7 +168,7 @@ ansible-playbook -i inventory.ini deploy.yml --check --diff
 | `Permission denied (publickey)`           | Wrong `ansible_user` or `ansible_ssh_private_key_file`. Verify key permissions `600`. |
 | `Missing sudo password`                   | Add `--ask-become-pass` or configure passwordless sudo for the SSH user.           |
 | `couldn't resolve module timezone`        | Install the collection: `ansible-galaxy collection install community.general`.     |
-| `pip3: command not found`                 | Run `configure.yml` first — it installs `python3-pip`.                             |
+| `pip3: command not found`                 | Run `configure.yml` first - it installs `python3-pip`.                             |
 | `error: externally-managed-environment`   | PEP 668 (Ubuntu 24.04+); `deploy.yml` passes `--break-system-packages`.            |
 | SSH hardening locked you out              | Confirm your public key is in `~/.ssh/authorized_keys` **before** disabling password auth. The `sshd -t` validation prevents writing a broken config. |
 | Cron job not running                      | Check `/opt/healthmon/logs/cron.log` and `sudo crontab -l -u healthmon`.            |
