@@ -109,7 +109,7 @@ taken from a live run against both managed hosts.
 
 | Playbook        | Run    | linux1            | linux2            |
 |-----------------|--------|-------------------|-------------------|
-| `configure.yml` | First  | `changed=6`       | `changed=6`       |
+| `configure.yml` | First  | `changed=6`       | `changed=7`       |
 | `configure.yml` | Second | `changed=0` ✅    | `changed=0` ✅    |
 | `deploy.yml`    | First  | `changed=2`       | `changed=2`       |
 | `deploy.yml`    | Second | `changed=0` ✅    | `changed=0` ✅    |
