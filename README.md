@@ -5,11 +5,6 @@ health monitoring, and multi-server deployment. Every project was
 written to solve a practical problem and stand on
 its own as a usable tool.
 
-> **Why this repo exists.** This is coursework from a scripting and automation
-> course approached from a sysadmin and cybersecurity perspective. The goal was learning-by-doing: writing real scripts that solve real
-> problems instead of textbook snippets. Each sprint
-> builds on the last, ending in a fully automated, idempotent deployment pipeline.
-
 ---
 
 ## The Scripts
