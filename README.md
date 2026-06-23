@@ -10,15 +10,15 @@ its own as a usable tool.
 ## The Scripts
 
 Each script is a self-contained project with its own detailed README, source, and
-sample output. Click through for the deep dive.
+sample output. See below for a deeper dive.
 
 | # | Project | What it does | Highlights |
 |---|---------|--------------|------------|
-| 1 | **[SSH Log Parser](sprint1/)** | Scans Linux `auth.log` for failed SSH logins and reports timestamp, user, and source IP to terminal + CSV | Regex parsing, stdlib-only, full error handling |
-| 2 | **[System Information Gatherer](sprint2/)** | Collects host telemetry (CPU, RAM, disk, network, uptime) and emits screen / CSV / JSON | `psutil`, importable as a module, structured output |
-| 3 | **[NetRecon](sprint3/)** | Network recon tool combining Nmap port scanning with IP geolocation into one CSV report | `python-nmap`, public API, optional remote scan over SSH |
-| 4 | **[HealthMon](sprint4/)** | Configurable system-health monitor with threshold alerts to a dedicated log and syslog | `logging` framework, JSON config, cron-ready |
-| 5 | **[HealthMon Deployment](sprint5/)** | Automates provisioning + deployment of HealthMon across multiple AWS servers with Ansible | Idempotent playbooks, SSH hardening, proven `changed=0` reruns |
+| 1 | **SSH Log Parser** | Scans Linux `auth.log` for failed SSH logins and reports timestamp, user, and source IP to terminal + CSV | Regex parsing, stdlib-only, full error handling |
+| 2 | **System Information Gatherer** | Collects host telemetry (CPU, RAM, disk, network, uptime) and emits screen / CSV / JSON | `psutil`, importable as a module, structured output |
+| 3 | **NetRecon** | Network recon tool combining Nmap port scanning with IP geolocation into one CSV report | `python-nmap`, public API, optional remote scan over SSH |
+| 4 | **HealthMon** | Configurable system-health monitor with threshold alerts to a dedicated log and syslog | `logging` framework, JSON config, cron-ready |
+| 5 | **HealthMon Deployment** | Automates provisioning + deployment of HealthMon across multiple AWS servers with Ansible | Idempotent playbooks, SSH hardening, proven `changed=0` reruns |
 
 ---
 
